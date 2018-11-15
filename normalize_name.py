@@ -10,7 +10,7 @@ from skimage import io
 import scipy.misc
 
 channel = "ch2"
-path = 'local_data/703_cd45/sk2/raw'
+path = 'local_data/703_cd45/named'
 file_extension = 'png'
 
 target_std = 0.125
@@ -54,4 +54,8 @@ for i in range(len(image_coll)):
     #I store directly to file using the file names I know already
     #io.imsave(scale_path[i], mat_ms)
     #png.from_array(mat_ms)
-    scipy.misc.toimage(mat_ms, cmin=0.0, cmax=1.0).save(scale_path[i])
+    #scipy.misc.toimage(mat_ms, cmin=0.0, cmax=1.0).save(scale_path[i])
+    scipy.misc.toimage(mat_ms, cmin=0.0, cmax=1.0).save(image_channel_path[i])
+
+
+#lab-FINKBEINER,condition-KEVAN_0_8,acquisition_date,year-2015,month-10,day-5,minute-0,well-A4,tile_computation-STITCHED,z_depth-9,channel-PHASE_CONTRAST,is_mask-false.png
