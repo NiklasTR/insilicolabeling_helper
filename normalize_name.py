@@ -6,11 +6,12 @@ from skimage import data, img_as_float
 from skimage import exposure
 from skimage import io
 
-from sklearn.preprocessing import StandardScaler
+#from sklearn.preprocessing import StandardScaler
+import scipy.misc
 
 dir = os.path.join(os.getcwd(), 'local_data/703_cd45/sk2/raw')
 file = np.array(os.listdir(dir))
-channel = "ch3"
+channel = "ch2"
 
 # I select the brightfield images that show my pattern
 # I nest list comprehension, np arrays to create my final list
@@ -25,7 +26,7 @@ for i in np.ndarray.tolist(brightfield_path):
 # I create a list of output filenames
 scale_path = []
 for i in range(len(brightfield_path)):
-    scale_path.append('scale_' + brightfield_path[i])
+    scale_path.append('scale_' + brightfield_path[i][:-5] + '.png')
 
 
 
@@ -49,5 +50,6 @@ for i in range(len(image_coll)):
     #I store
     #image_scaled.append(mat_ms)
     #I store directly to file using the file names I know already
-    io.imsave(scale_path[i], mat_ms)
+    #io.imsave(scale_path[i], mat_ms)
     #png.from_array(mat_ms)
+    scipy.misc.toimage(mat_ms, cmin=0.0, cmax=1.0).save(scale_path[i])
