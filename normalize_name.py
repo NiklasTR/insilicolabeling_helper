@@ -9,36 +9,38 @@ from skimage import io
 #from sklearn.preprocessing import StandardScaler
 import scipy.misc
 
-dir = os.path.join(os.getcwd(), 'local_data/703_cd45/sk2/raw')
-file = np.array(os.listdir(dir))
 channel = "ch2"
+path = 'local_data/703_cd45/sk2/raw'
+file_extension = 'png'
 
-# I select the brightfield images that show my pattern
+target_std = 0.125
+target_mean = 0.5
+
+dir = os.path.join(os.getcwd(), path)
+file = np.array(os.listdir(dir))
+
+# I select the image_channel images that show my pattern
 # I nest list comprehension, np arrays to create my final list
-brightfield_path = np.sort(file[np.array([channel in i for i in file])])
+image_channel_path = np.sort(file[np.array([channel in i for i in file])])
 
 # I add the full path
 joined_list = []
-for i in np.ndarray.tolist(brightfield_path):
+for i in np.ndarray.tolist(image_channel_path):
     joined = os.path.join(dir, i)
     joined_list.append(joined)
 
 # I create a list of output filenames
 scale_path = []
-for i in range(len(brightfield_path)):
-    scale_path.append('scale_' + brightfield_path[i][:-5] + '.png')
-
-
+for i in range(len(image_channel_path)):
+    scale_path.append('scale_' + image_channel_path[i][:-4] + file_extension)
 
 #I collapse the list into the standard input format for image collections
 collapsed_list = ':'.join(joined_list)
 
+#I load data
 image_coll = io.imread_collection(collapsed_list)
 
-###### dev
-target_std = 0.125
-target_mean = 0.5
-
+#I scale and save data
 image_scaled = []
 for i in range(len(image_coll)):
     #image_scaled.append(StandardScaler().fit_transform(image_coll[i]))
