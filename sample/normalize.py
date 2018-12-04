@@ -9,14 +9,15 @@ from skimage import io
 #from sklearn.preprocessing import StandardScaler
 import scipy.misc
 import imageio
+import re
 
 channel = "BRIGHTFIELD"
 path = 'local_data/703_cd45/named'
 file_extension = 'png'
 
-target_std = 8170 #0.125
-target_mean = 32768 #0.5
-max_num = 65354
+target_std = 0.125 #
+target_mean = 0.5 #32767.5 #
+max_num = 1#65535
 min_num = 0
 
 dir = os.path.join(os.getcwd(), path)
@@ -34,10 +35,11 @@ for i in np.ndarray.tolist(image_channel_path):
 
 # I create a list of output filenames
 scale_path = []
-#for i in range(len(image_channel_path)):
-#    scale_path.append('scale_' + image_channel_path[i][:-4] + file_extension)
 for i in range(len(image_channel_path)):
-    scale_path.append(image_channel_path[i][:-4] + file_extension)
+    num = re.search(r'(z_depth-)(\d*)', image_channel_path[i]).group(2)
+    num = int(num)-1
+    tmp = re.sub(r'depth-\d*', "depth-"+ str(num), image_channel_path[i])
+    scale_path.append(tmp[:-4] + file_extension)
 
 #I collapse the list into the standard input format for image collections
 collapsed_list = ':'.join(joined_list)
@@ -50,21 +52,14 @@ image_scaled = []
 for i in range(len(image_coll)):
     #image_scaled.append(StandardScaler().fit_transform(image_coll[i]))
     tmp = image_coll[i]
-    tmp = tmp.astype(np.uint16)
+    #tmp = tmp.astype(np.uint16)
     #I rescale
     mat_ms = target_mean + (tmp - tmp.mean()) * (target_std/tmp.std())
     #I trim
     mat_ms[mat_ms > max_num] = max_num
     mat_ms[mat_ms < min_num] = min_num
     #mat_ms = mat_ms.astype(np.int16)
+    mat_ms = mat_ms*65535
+    mat_ms = mat_ms.astype(np.uint16)
     #I store
-    #image_scaled.append(mat_ms)
-    #I store directly to file using the file names I know already
-    #io.imsave(scale_path[i], mat_ms)
-    #png.from_array(mat_ms)
-    #scipy.misc.toimage(mat_ms, cmin=0.0, cmax=1.0).save(scale_path[i])
-    #scipy.misc.toimage(mat_ms, cmin=0.0, cmax=1.0).save(image_channel_path[i])
-    imageio.imwrite(uri = scale_path[i], im = mat_ms, optimize = False, compress_level = 0, bits = 16)
-
-
-#lab-FINKBEINER,condition-KEVAN_0_8,acquisition_date,year-2015,month-10,day-5,minute-0,well-A4,tile_computation-STITCHED,z_depth-9,channel-PHASE_CONTRAST,is_mask-false.png
+    imageio.imwrite(uri = scale_path[i], im = mat_ms)
