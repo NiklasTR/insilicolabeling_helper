@@ -63,3 +63,5 @@ def main(channel = "BRIGHTFIELD", file_extension = 'png', target_std = 0.125, ta
         mat_ms = mat_ms.astype(np.uint16)
         #I store
         imageio.imwrite(uri = scale_path[i], im = mat_ms)
+
+    print("normalized files in: {0}" .format(dir))
