@@ -5,7 +5,7 @@ import pandas as pd
 import os
 from string import ascii_uppercase
 
-from definition import CONFIG_PATH
+#from definition import CONFIG_PATH
 
 def read_original_files(dir, file_extension = 'tiff'):
     # access dir and read filenames
@@ -64,8 +64,8 @@ def change_name(df_row, dir = "~/tmp"):
 
 
 def rename_file(path = "local_data/703_cd45/sk2_copy/raw"):
-    dir = os.path.join(os.getcwd(), path)
-    #dir = path
+    #dir = os.path.join(os.getcwd(), path)
+    dir = path
 
     tmp = read_original_files(dir)
     tmp = extract_original_files(tmp)
@@ -77,7 +77,16 @@ def rename_file(path = "local_data/703_cd45/sk2_copy/raw"):
     print("renamed files in: {0}" .format(dir))
 
 def main():
-    path = os.path.join(CONFIG_PATH, sys.argv[1])
+    path = sys.argv[1]
     rename_file(path)
 
 main()
+
+#dir
+#dir = "/Users/nrindtor/GitHub/isl_preprocess/local_data/703_cd45/sk2_copy/raw/"
+#dir = "ascstore/inbox/101018_sample_48h__2018-10-12T16_14_21-Measurement_1"
+
+#dir = pd.Series(dir)
+#tmp = dir.str.split("/")
+#print(tmp)
+#tmp.str.contains("inbox", regex = False)
