@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import os
 from string import ascii_uppercase
+import datetime
 
 #from definition import CONFIG_PATH
 
@@ -16,9 +17,6 @@ def read_original_files(dir, file_extension = 'tiff'):
     file_df = pd.DataFrame(file)
     file_df.columns = ['original_name']
     file_df['condition'] = dir.split('/')[-1]       # I set the superior directory to be the condition
-    # TODO I create some date and time variables for consistency
-    # os.path.getmtime(dir)
-    # os.stat(dir)
     return(file_df)
 
 
@@ -57,9 +55,12 @@ def translate_channel(df_row):
 
 def build_isl_name(lab = "CCLF", condition = "unknown",year = "2019",month = "00",day = "00",minute = "0",well = "Z00",
                    tile_computation = "00", z_depth = "00",channel = "UNKNOWN",is_mask = "false"):
+                       # I create some date and time variables for consistency
+                       dt = datetime.datetime.now()
+
     return('lab-{0},condition-{1},acquisition_date,year-{2},month-{3},day-{4},minute-{5},'
-    'well-{6},tile_computation-{7},z_depth-{8},channel-{9},is_mask-{10}.tiff' .format(lab, condition, year,
-    month, day, minute, well, tile_computation, z_depth, channel, is_mask))
+    'well-{6},tile_computation-{7},z_depth-{8},channel-{9},is_mask-{10}.tiff' .format(lab, condition, dt.year,
+    dt.month, dt.day, dt.minute, well, tile_computation, z_depth, channel, is_mask))
 
 def supply_isl_name(df_row, experiment_descriptor = "None"):
     return(build_isl_name(well = df_row['well'],
