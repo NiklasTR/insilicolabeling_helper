@@ -87,13 +87,12 @@ def rename_file(path):
     tmp.to_csv("rename_file_log.csv")
     print("renamed files in: {0}" .format(dir))
 
-def main():
+def main_manual():
     path = sys.argv[1]
     #for debugging:
     #path = '/Users/nrindtor/bucket/flatfield/703__2018-11-07T20_55_16-Measurement_1/703__2018-11-07T20_55_16-Measurement_1-sk2-A02-f08-ch2'
     rename_file(path)
 
-main()
 
 #dir
 #dir = "/Users/nrindtor/GitHub/isl_preprocess/local_data/703_cd45/sk2_copy/raw/"
