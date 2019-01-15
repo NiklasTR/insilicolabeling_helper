@@ -63,7 +63,7 @@ def change_name(df_row, dir = "~/tmp"):
     return()
 
 
-def rename_file(path = "local_data/703_cd45/sk2_copy/raw"):
+def rename_file(path):
     #dir = os.path.join(os.getcwd(), path)
     dir = path
 
@@ -78,6 +78,8 @@ def rename_file(path = "local_data/703_cd45/sk2_copy/raw"):
 
 def main():
     path = sys.argv[1]
+    #for debugging:
+    #dir = '/Users/nrindtor/GitHub/isl_preprocess/local_data/703_cd45/sk2_copy/raw/'
     rename_file(path)
 
 main()
