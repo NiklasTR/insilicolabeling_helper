@@ -15,6 +15,10 @@ def read_original_files(dir, file_extension = 'tiff'):
     # turn array into DataFrame
     file_df = pd.DataFrame(file)
     file_df.columns = ['original_name']
+    file_df['condition'] = dir.split('/')[-1]       # I set the superior directory to be the condition
+    # TODO I create some date and time variables for consistency
+    # os.path.getmtime(dir)
+    # os.stat(dir)
     return(file_df)
 
 
@@ -29,7 +33,9 @@ def extract_original_files(df):
                     row = df.original_name.str.slice(1,3),
                     col = df.original_name.str.slice(4,6),
                     tile_computation = df.original_name.str.slice(7,9),
-                    z_depth_string = df.original_name.str.slice(10,12))
+                    z_depth_string = df.original_name.str.slice(10,12),
+                    timepoint = df.original_name.str.slice(17,19),
+                    )
     return(df)
 
 
@@ -42,11 +48,14 @@ def transform_original_files(df):
 
 
 def translate_channel(df_row):
-    dict = {"ch1" : "DPC", "ch2" : "BRIGHTFIELD", "ch3" : "CELLEVENT", "ch4" : "TMRM"}
+    dict = {"ch1" : "DPC",
+            "ch2" : "BRIGHTFIELD",
+            "ch3" : "CD45",     # This channel is CELLEVENT most of the time
+            "ch4" : "TMRM"}
     return(dict[df_row['channel_n']])
 
 
-def build_isl_name(lab = "CCLF", condition = "unknown",year = "2018",month = "00",day = "99",minute = "0",well = "Z00",
+def build_isl_name(lab = "CCLF", condition = "unknown",year = "2019",month = "00",day = "00",minute = "0",well = "Z00",
                    tile_computation = "00", z_depth = "00",channel = "UNKNOWN",is_mask = "false"):
     return('lab-{0},condition-{1},acquisition_date,year-{2},month-{3},day-{4},minute-{5},'
     'well-{6},tile_computation-{7},z_depth-{8},channel-{9},is_mask-{10}.tiff' .format(lab, condition, year,
@@ -56,9 +65,10 @@ def supply_isl_name(df_row, experiment_descriptor = "None"):
     return(build_isl_name(well = df_row['well'],
         tile_computation = df_row['tile_computation'],
         z_depth = df_row['z_depth'],
-        channel = df_row['channel']))
+        channel = df_row['channel'],
+        condition = df_row['condition']))
 
-def change_name(df_row, dir = "~/tmp"):
+def change_name(df_row, dir):
     os.rename(os.path.join(dir, df_row['original_name']), os.path.join(dir, df_row['isl_name']))
     return()
 
@@ -79,7 +89,7 @@ def rename_file(path):
 def main():
     path = sys.argv[1]
     #for debugging:
-    #dir = '/Users/nrindtor/GitHub/isl_preprocess/local_data/703_cd45/sk2_copy/raw/'
+    #path = '/Users/nrindtor/bucket/flatfield/703__2018-11-07T20_55_16-Measurement_1/703__2018-11-07T20_55_16-Measurement_1-sk2-A02-f08-ch2'
     rename_file(path)
 
 main()
