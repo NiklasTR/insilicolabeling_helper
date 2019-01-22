@@ -13,17 +13,14 @@ import imageio
 import re
 
 # This function is huge but it gets the job done
-def identify_files(path, channel = "BRIGHTFIELD", file_extension = 'png', input_extension = 'tif'):
+def main(channel = "BRIGHTFIELD", file_extension = 'png', input_extension = 'tif', target_std = 0.125, target_mean = 0.5 , max_num = 1 , min_num = 0):
 
     #32767.5 # target_mean
     #65535 max_num
 
-    #legacy renaming
-    dir = path
-
-    #dir = sys.argv[1]
+    dir = sys.argv[1]
     #for debugging:
-    #dir = '/Users/nrindtor/bucket_tmp/tmp/703__2018-11-07T20_55_16-Measurement_1-sk1-A01-f01-ch2'
+    dir = '/Users/nrindtor/bucket_tmp/tmp/703__2018-11-07T20_55_16-Measurement_1-sk1-A01-f01-ch2'
 
     #for local:
     #dir = '/Users/nrindtor/rapid_dev/insilico-labeling/703_cd45/cd45_projection/'
@@ -52,12 +49,7 @@ def identify_files(path, channel = "BRIGHTFIELD", file_extension = 'png', input_
 
     #I collapse the list into the standard input format for image collections
     collapsed_list = ':'.join(joined_list)
-    return(collapsed_list)
 
-
-def create_output_filename(image_channel_path, file_extension, path, crop_num=-4):
-    #legacy renaming
-    dir = path
     # I create a list of output filenames
     scale_path = []
     for i in range(len(image_channel_path)):
@@ -66,14 +58,12 @@ def create_output_filename(image_channel_path, file_extension, path, crop_num=-4
         #num = int(num)-1
         #new_name = re.sub(r'depth-\d*', "depth-"+ str(num), image_channel_path[i])
         #new_name = new_name[:-4] + file_extension #trimming the file ending
-        new_name = image_channel_path[i][:crop_num] + file_extension #trimming the file ending
+        new_name = image_channel_path[i][:-4] + file_extension #trimming the file ending
         joined_new_name = os.path.join(dir, new_name)
         scale_path.append(joined_new_name)
 
-    return(scale_path)
 
 
-def normalize_convert(collapsed_list, image_coll, target_std = 0.125, target_mean = 0.5 , max_num = 1 , min_num = 0):
     #I load data
     image_coll = io.imread_collection(collapsed_list)
 
@@ -97,4 +87,4 @@ def normalize_convert(collapsed_list, image_coll, target_std = 0.125, target_mea
 
         print("normalized files in: {0}" .format(scale_path[i]))
 
-def clean(path):
+main()
