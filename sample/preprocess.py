@@ -17,7 +17,7 @@ def process_dir(path, channel, phrase='None'):         #, ch1="DPC", ch2="BRIGHT
     channel_list = [ch1, ch2, ch3, ch4]
     phrase_list = [phrase]
     # I keep channels that are actually called, there are more elegant ways to do this
-    channel_list = np.setdiff1d(channel_list,phrase_list)
+    channel_list = np.setdiff1d(channel_list,phrase_list) 
 
     for channel in channel_list
     if channel == "BRIGHTFIELD":
