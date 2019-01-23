@@ -12,50 +12,30 @@ import scipy.misc
 import imageio
 import re
 
-# This function is huge but it gets the job done
-def identify_files(path, channel = "BRIGHTFIELD", file_extension = 'png', input_extension = 'tif'):
-
     #32767.5 # target_mean
     #65535 max_num
 
+# This function is huge but it gets the job done
+def identify_files(path, channel = "BRIGHTFIELD", input_extension = 'tif'):
     #legacy renaming
     dir = path
-
+    dir = "/Users/nrindtor/bucket_tmp/flatfield/703__2018-11-07T20_55_16-Measurement_1/703__2018-11-07T20_55_16-Measurement_1-sk2-A01-f07-ch2/"
     #dir = sys.argv[1]
-    #for debugging:
-    #dir = '/Users/nrindtor/bucket_tmp/tmp/703__2018-11-07T20_55_16-Measurement_1-sk1-A01-f01-ch2'
-
     #for local:
     #dir = '/Users/nrindtor/rapid_dev/insilico-labeling/703_cd45/cd45_projection/'
     #channel = "CD45"
-
     #path = 'local_data/703_cd45/named' #/Users/nrindtor/bucket/flatfield/703__2018-11-07T20_55_16-Measurement_1-sk2-A01-f07-ch2
     #dir = os.path.join(os.getcwd(), path)
-    file_list = os.listdir(dir)
-    # I only keep .tiff images in my list
+    file_list = os.listdir(dir)     # I only keep .tiff images in my list
     file_list = [i for i in file_list if input_extension in i]
-
     file = np.array(file_list)
-
     # I select the image_channel images that show my pattern
     # I nest list comprehension, np arrays to create my final list
     image_channel_path = np.sort(file[np.array([channel in i for i in file])])
-    # This
-    #image_channel_path[image_channel_path.defchararray.endswith(file_extension)]
-
-    # I add the full path
-    joined_list = []
-    for i in np.ndarray.tolist(image_channel_path):
-        joined = os.path.join(dir, i)
-        joined_list.append(joined)
+    return(image_channel_path)
 
 
-    #I collapse the list into the standard input format for image collections
-    collapsed_list = ':'.join(joined_list)
-    return(collapsed_list)
-
-
-def create_output_filename(image_channel_path, file_extension, path, crop_num=-4):
+def create_output_filename(path, image_channel_path, file_extension = 'png', crop_num=-4):
     #legacy renaming
     dir = path
     # I create a list of output filenames
@@ -73,7 +53,13 @@ def create_output_filename(image_channel_path, file_extension, path, crop_num=-4
     return(scale_path)
 
 
-def normalize_convert(collapsed_list, image_coll, target_std = 0.125, target_mean = 0.5 , max_num = 1 , min_num = 0):
+def normalize_convert(image_channel_path, scale_path, target_std = 0.125, target_mean = 0.5 , max_num = 1 , min_num = 0):
+    joined_list = []
+    for i in np.ndarray.tolist(image_channel_path):
+        joined = os.path.join(dir, i)
+        joined_list.append(joined)
+    #I collapse the list into the standard input format for image collections
+    collapsed_list = ':'.join(joined_list)
     #I load data
     image_coll = io.imread_collection(collapsed_list)
 
@@ -97,4 +83,12 @@ def normalize_convert(collapsed_list, image_coll, target_std = 0.125, target_mea
 
         print("normalized files in: {0}" .format(scale_path[i]))
 
-def clean(path):
+def clean(image_channel_path):
+    """
+    erase files that have been renamed but not normalized
+    """
+    for file in image_channel_path:
+        os.remove(file)
+        print("deleted {o}" .format(file)) 
+
+    print("directory cleaned")
