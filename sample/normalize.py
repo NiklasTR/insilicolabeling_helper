@@ -19,7 +19,7 @@ import re
 def identify_files(path, channel = "BRIGHTFIELD", input_extension = 'tif'):
     #legacy renaming
     dir = path
-    dir = "/Users/nrindtor/bucket_tmp/flatfield/703__2018-11-07T20_55_16-Measurement_1/703__2018-11-07T20_55_16-Measurement_1-sk2-A01-f07-ch2/"
+    #dir = "/Users/nrindtor/bucket_tmp/flatfield/703__2018-11-07T20_55_16-Measurement_1/703__2018-11-07T20_55_16-Measurement_1-sk2-A01-f07-ch2/"
     #dir = sys.argv[1]
     #for local:
     #dir = '/Users/nrindtor/rapid_dev/insilico-labeling/703_cd45/cd45_projection/'
@@ -53,7 +53,10 @@ def create_output_filename(path, image_channel_path, file_extension = 'png', cro
     return(scale_path)
 
 
-def normalize_convert(image_channel_path, scale_path, target_std = 0.125, target_mean = 0.5 , max_num = 1 , min_num = 0):
+def normalize_convert(path, image_channel_path, scale_path, target_std, target_mean, max_num, min_num):
+    #legacy renaming
+    dir = path
+    # joining
     joined_list = []
     for i in np.ndarray.tolist(image_channel_path):
         joined = os.path.join(dir, i)
@@ -83,12 +86,19 @@ def normalize_convert(image_channel_path, scale_path, target_std = 0.125, target
 
         print("normalized files in: {0}" .format(scale_path[i]))
 
-def clean(image_channel_path):
+def normalize_convert_brightfield(path,image_channel_path, scale_path, target_std = 0.125, target_mean = 0.5 , max_num = 1 , min_num = 0):
+    normalize_convert(path,image_channel_path, scale_path, target_std, target_mean, max_num, min_num)
+
+def normalize_convert_flourescent(path,image_channel_path, scale_path, target_std = 0.125, target_mean = 0.25 , max_num = 1 , min_num = 0):
+    normalize_convert(path,image_channel_path, scale_path, target_std, target_mean, max_num, min_num)
+
+# buggy TODO nrindtor
+def __clean(path, pattern = '.tiff'):
     """
     erase files that have been renamed but not normalized
     """
-    for file in image_channel_path:
-        os.remove(file)
-        print("deleted {o}" .format(file)) 
+    for f in os.listdir(path):
+        if re.search(pattern, f):
+            os.remove(os.path.join(path, f))
 
     print("directory cleaned")

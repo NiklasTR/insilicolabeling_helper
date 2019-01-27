@@ -37,21 +37,21 @@ def extract_original_files(df):
     return(df)
 
 
-def transform_original_files(df, ch1="DPC", ch2="BRIGHTFIELD", ch3="CE", ch4="TMRM"):
+def transform_original_files(df, ch1, ch2, ch3, ch4):
     df = df.assign(well = df.apply(row_col_to_well, axis = 1),
-                   channel = df.apply(translate_channel, axis = 1, ch1, ch2, ch3, ch4),
+                   channel = df.apply(translate_channel, axis = 1, ch1 = ch1, ch2 = ch2, ch3 = ch3, ch4 = ch4),
                    z_depth = df.apply(format_z_depth, axis = 1))
     df = df.assign(isl_name = df.apply(supply_isl_name, axis = 1, experiment_descriptor = "None"))
     return(df)
 
 
-def translate_channel(df_row, ch1="DPC", ch2="BRIGHTFIELD", ch3="CE", ch4="TMRM"):
-    if ch3 == "CE" & ch4="TMRM":
+def translate_channel(df_row, ch1, ch2, ch3, ch4):
+    if ch3 == "CE" and ch4=="TMRM":
         dict = {"ch1" : "DPC",
                 "ch2" : "BRIGHTFIELD",
                 "ch3" : "MAP2_CONFOCAL",     # This channel is CELLEVENT most of the time
                 "ch4" : "TUJ1_WIDEFIELD"}
-    if ch3 == "CD45" & ch4="TMRM":
+    if ch3 == "CD45" and ch4=="TMRM":
         dict = {"ch1" : "DPC",
                 "ch2" : "BRIGHTFIELD",
                 "ch3" : "ISLET_WIDEFIELD",     # This channel is CELLEVENT most of the time
@@ -65,7 +65,7 @@ def translate_channel(df_row, ch1="DPC", ch2="BRIGHTFIELD", ch3="CE", ch4="TMRM"
 
 def build_isl_name(lab = "CCLF", condition = "unknown",year = "2019",month = "00",day = "00",minute = "0",well = "Z00",
                    tile_computation = "00", z_depth = "00",channel = "UNKNOWN",is_mask = "false"):
-       # I create some date and time variables for consistency
+    # I create some date and time variables for consistency
     dt = datetime.datetime.now()
     string = 'lab-{0},condition-{1},acquisition_date,year-{2},month-{3},day-{4},minute-{5},well-{6},tile_computation-{7},z_depth-{8},channel-{9},is_mask-{10}.tiff' \
     .format(lab, condition, dt.year, dt.month, dt.day, dt.minute, well, tile_computation, z_depth, channel, is_mask)
@@ -83,7 +83,7 @@ def change_name(df_row, dir):
     return()
 
 
-def rename_file(path, ch1="DPC", ch2="BRIGHTFIELD", ch3="CE", ch4="TMRM"):
+def rename_file(path, ch1, ch2, ch3, ch4):
     #dir = os.path.join(os.getcwd(), path)
     dir = path
 
@@ -95,22 +95,18 @@ def rename_file(path, ch1="DPC", ch2="BRIGHTFIELD", ch3="CE", ch4="TMRM"):
     # I create a log of my rename operation
     tmp.to_csv("rename_file_log.csv")
     print("renamed files in: {0}" .format(dir))
+    return(tmp['channel'][1])
 
 def __main_manual():
     path = sys.argv[1]
-    #for debugging:
-    #path = '/Users/nrindtor/bucket_tmp/tmp/703__2018-11-07T20_55_16-Measurement_1-sk1-A01-f01-ch2'
     rename_file(path)
 
 if __name__ == '__main__':
     __main_manual()
 
-
-#dir
-#dir = "/Users/nrindtor/GitHub/isl_preprocess/local_data/703_cd45/sk2_copy/raw/"
-#dir = "ascstore/inbox/101018_sample_48h__2018-10-12T16_14_21-Measurement_1"
-
-#dir = pd.Series(dir)
-#tmp = dir.str.split("/")
-#print(tmp)
-#tmp.str.contains("inbox", regex = False)
+#for debugging:
+path = '/Users/nrindtor/GitHub/isl_preprocess/local_data/test/703__2018-11-07T20_55_16-Measurement_1-sk2-A05-f07-ch2'
+ch1="DPC"
+ch2="BRIGHTFIELD"
+ch3="CE"
+ch4="TMRM"
