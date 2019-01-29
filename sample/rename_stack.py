@@ -42,6 +42,7 @@ def transform_original_files(df, ch1, ch2, ch3, ch4):
                    channel = df.apply(translate_channel, axis = 1, ch1 = ch1, ch2 = ch2, ch3 = ch3, ch4 = ch4),
                    z_depth = df.apply(format_z_depth, axis = 1))
     df = df.assign(isl_name = df.apply(supply_isl_name, axis = 1, experiment_descriptor = "None"))
+
     return(df)
 
 
