@@ -30,16 +30,7 @@ def extract_original_files(df):
                     )
     return(df)
 
-## sandbox
-#original_name = "000012070903_2019-01-10T20_04_27-Measurement_3_sk1_A01_f01_ch3_maxproject.tiff"
-#name_split = original_name.split('_')
-#name_split[-2]
-#name_split[-3][1:]
-#name_split[-4]
-#name_split[-5]
-
 def extract_original_files_project(df):
-
 
     df = df.assign(channel_n = df.original_name.split('_')[-2],
                     #row = df.original_name.str.slice(1,3),
@@ -48,10 +39,10 @@ def extract_original_files_project(df):
                     )
     return(df)
 
-def transform_original_files(df, ch1, ch2, ch3, ch4):
-    df = df.assign(well = df.apply(row_col_to_well, axis = 1),
+def transform_original_files_project(df, ch1, ch2, ch3, ch4):
+
+    df = df.assign(well = df.original_name.split('_')[-4],
                    channel = df.apply(translate_channel, axis = 1, ch1 = ch1, ch2 = ch2, ch3 = ch3, ch4 = ch4),
-                   z_depth = df.apply(format_z_depth, axis = 1))
     df = df.assign(isl_name = df.apply(supply_isl_name, axis = 1, experiment_descriptor = "None"))
     return(df)
 
@@ -78,7 +69,7 @@ def build_isl_name(lab = "CCLF", condition = "unknown",year = "2019",month = "00
                    tile_computation = "00", z_depth = "00",channel = "UNKNOWN",is_mask = "false"):
     # I create some date and time variables for consistency
     dt = datetime.datetime.now()
-    string = 'lab-{0},condition-{1},acquisition_date,year-{2},month-{3},day-{4},minute-{5},well-{6},tile_computation-{7},z_depth-{8},channel-{9},is_mask-{10}.tiff' \
+    string = 'lab-{0},condition-{1},acquisition_date,year-{2},month-{3},day-{4},minute-{5},well-{6},tile_computation-{7},depth_computation-MAXPROJECT,channel-{9},is_mask-{10}.tiff' \
     .format(lab, condition, dt.year, dt.month, dt.day, dt.minute, well, tile_computation, z_depth, channel, is_mask)
     return(string)
 
@@ -114,10 +105,3 @@ def __main_manual():
 
 if __name__ == '__main__':
     __main_manual()
-
-#for debugging:
-path = '/Users/nrindtor/GitHub/isl_preprocess/local_data/test/703__2018-11-07T20_55_16-Measurement_1-sk2-A05-f07-ch2'
-ch1="DPC"
-ch2="BRIGHTFIELD"
-ch3="CE"
-ch4="TMRM"

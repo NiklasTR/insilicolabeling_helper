@@ -30,7 +30,7 @@ def process_dir_stack(path, ch1, ch2, ch3, ch4, keep_stack):         #, ch1="DPC
         #delete renamed leftover
         #normalize.clean(path)
 
-def process_dir_project(path, ch1, ch2, ch3, ch4, keep_stack):         #, ch1="DPC", ch2="BRIGHTFIELD", ch3="CE", ch4="TMRM"
+def process_dir_project(path, ch1, ch2, ch3, ch4, keep_project):         #, ch1="DPC", ch2="BRIGHTFIELD", ch3="CE", ch4="TMRM"
     """
     renames and normalizes directory
     path=directory of interest with .tiff files
@@ -40,14 +40,14 @@ def process_dir_project(path, ch1, ch2, ch3, ch4, keep_stack):         #, ch1="D
     #renaming
     channel = rename_stack.rename_file(path, ch1, ch2, ch3, ch4)
     #normalizing
-    if channel == keep_stack:
+    if channel == keep_project:
         image_channel_path = normalize.identify_files(path, channel = channel)
         scale_path = normalize.create_output_filename(path, image_channel_path)
-        normalize.normalize_convert_brightfield(path,image_channel_path, scale_path)
+        normalize.normalize_convert_flourescent(path,image_channel_path, scale_path)
         #delete renamed leftover
         #normalize.clean(image_channel_path)
     else:
-        print("Received images that did not match the keep_stack pattern. This should not happen")
+        print("Received images that did not match the keep_project pattern. This should not happen")
 
 def __main_manual(path=sys.argv[1], ch1=sys.argv[2], ch2=sys.argv[3], ch3=sys.argv[4], ch4=sys.argv[5], pattern = "Measurement", keep_stack = "BRIGHTFIELD"):
     # ch1="DPC", ch2="BRIGHTFIELD", ch3="CE", ch4="TMRM"
