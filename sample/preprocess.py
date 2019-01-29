@@ -31,6 +31,8 @@ def process_dir(path, ch1, ch2, ch3, ch4):         #, ch1="DPC", ch2="BRIGHTFIEL
 def __main_manual(path=sys.argv[1], ch1="DPC", ch2="BRIGHTFIELD", ch3="CE", ch4="TMRM", pattern = "Measurement"):
     # creating list of dirs
     #path = '/Users/nrindtor/GitHub/isl_preprocess/local_data/test'
+    pattern = sys.argv[6]
+
     dir_list = os.listdir(path)
     dir_list = [i for i in dir_list if pattern in i]
     for dir in dir_list:
