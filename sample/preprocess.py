@@ -57,10 +57,10 @@ def __main_manual(path=sys.argv[1], ch1=sys.argv[2], ch2=sys.argv[3], ch3=sys.ar
     dir_list = os.listdir(path)
     dir_list = [i for i in dir_list if pattern in i]
     #I define a dictionary of channels
-    channel_dict = {"ch1" = ch1,
-                    "ch2" = ch2,
-                    "ch3" = ch3,
-                    "ch4" = ch4}
+    channel_dict = {"ch1" : ch1,
+                    "ch2" : ch2,
+                    "ch3" : ch3,
+                    "ch4" : ch4}
     d_inverted={v:k for k,v in channel_dict.items()}
     pattern_stack = d_inverted[keep_stack]
     #I only keep stacks for the directory list and run the loop
