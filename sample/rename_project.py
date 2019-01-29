@@ -8,9 +8,16 @@ import datetime
 
 #from definition import CONFIG_PATH
 
-def read_original_files(dir, file_extension = 'tiff'):
+def read_original_files(dir, file_extension = 'tiff', pattern = "CCLF"):
     # access dir and read filenames
     file = pd.Series(os.listdir(dir))
+
+    # scoop up previously processed directories
+    if file.str.contains(pattern).sum() > 0:
+        print("Directory already processed")
+        status = "processed"
+        return status
+
     # keep files that match pattern
     file = file[file.str.endswith(file_extension)]
     # turn array into DataFrame
@@ -88,6 +95,11 @@ def rename_file(path, ch1, ch2, ch3, ch4):
     dir = path
 
     tmp = read_original_files(dir)
+
+    if not isinstance(tmp, pd.DataFrame):
+        channel = "empty"
+        return(channel)
+
     tmp = extract_original_files_project(tmp)
     tmp = transform_original_files_project(tmp, ch1, ch2, ch3, ch4)
 
