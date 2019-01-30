@@ -17,6 +17,11 @@ def read_original_files(dir, file_extension = 'tiff', pattern_name = "CCLF", pat
         print("Directory already processed")
         status = "processed"
         return status
+    # scoop up renamed but unnormalized directories
+    if file.str.contains(pattern_name).sum() > 0:
+        print("Directory already processed")
+        status = "renamed"
+        return status
 
     # keep files that match pattern
     file = file[file.str.endswith(file_extension)]
@@ -96,9 +101,13 @@ def rename_file(path, ch1, ch2, ch3, ch4):
 
     tmp = read_original_files(dir)
 
-    if not isinstance(tmp, pd.DataFrame):
-        channel = "empty"
-        return(channel)
+        if not isinstance(tmp, pd.DataFrame):
+            if tmp == "processed":
+                channel = "processed"
+                return(channel)
+            elif tmp == "renamed":
+                channel = "renamed"
+                return(channel)
 
     tmp = extract_original_files_project(tmp)
     tmp = transform_original_files_project(tmp, ch1, ch2, ch3, ch4)
