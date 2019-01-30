@@ -8,12 +8,12 @@ import datetime
 
 #from definition import CONFIG_PATH
 
-def read_original_files(dir, file_extension = 'tiff', pattern = "CCLF"):
+def read_original_files(dir, file_extension = 'tiff', pattern_name = "CCLF", pattern_extension = ".png"):
     # access dir and read filenames
     file = pd.Series(os.listdir(dir))
 
     # scoop up previously processed directories
-    if file.str.contains(pattern).sum() > 0:
+    if file.str.contains(pattern_name).sum() > 0 and file.str.contains(pattern_extension).sum() > 0:
         print("Directory already processed")
         status = "processed"
         return status

@@ -22,7 +22,7 @@ def process_dir_stack(path, ch1, ch2, ch3, ch4, keep_stack):         #, ch1="DPC
         #delete renamed leftover
         #normalize.clean(image_channel_path)
     else:
-        print("Skipped directory or received images that did not match the keep_stack pattern.")
+        print("Skipped directory or received images that did not match the keep_stack pattern")
 
 def process_dir_project(path, ch1, ch2, ch3, ch4, avoid_project):         #, ch1="DPC", ch2="BRIGHTFIELD", ch3="CE", ch4="TMRM"
     """
