@@ -53,6 +53,19 @@ def create_output_filename(path, image_channel_path, file_extension = 'png', cro
 
     return(scale_path)
 
+## straigt outta SO
+def find_max_mode(list1):
+    list_table = statistics._counts(list1)
+    len_table = len(list_table)
+
+    if len_table == 1:
+        max_mode = statistics.mode(list1)
+    else:
+        new_list = []
+        for i in range(len_table):
+            new_list.append(list_table[i][0])
+        max_mode = max(new_list) # use the max value here
+    return max_mode
 
 def normalize_convert_mu_sd(path, image_channel_path, scale_path, target_std, target_mean, max_num, min_num):
     #legacy renaming
@@ -111,7 +124,7 @@ def normalize_convert_percent(path, image_channel_path, scale_path, target_low, 
         #tmp = tmp.astype(np.uint16)
         max = np.quantile(tmp, target_high)
         if target_low == "mode":
-            min = float(mode(tmp.flatten().tolist()))
+            min = float(find_max_mode(tmp.flatten().tolist()))
         elif target_low == "median":
             min = np.quantile(tmp, 0.5)
         else:
