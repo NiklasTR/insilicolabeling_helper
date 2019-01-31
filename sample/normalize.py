@@ -12,6 +12,7 @@ import scipy.misc
 import imageio
 import re
 from statistics import mode
+import statistics
 
     #32767.5 # target_mean
     #65535 max_num
