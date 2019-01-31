@@ -8,8 +8,9 @@ import datetime
 
 #from definition import CONFIG_PATH
 
-def read_original_files(dir, file_extension = 'tiff', pattern_name = "CCLF", pattern_extension = ".png"):
+def read_original_files(dir, file_extension = 'tiff', pattern_name = "CCLF", pattern_extension = "png"):
     # access dir and read filenames
+    # dir = "/Users/nrindtor/bucket/flatfield/000012070903_2019-01-10T20_04_27-Measurement_3/000012070903_2019-01-10T20_04_27-Measurement_3-sk1-A01-f01-ch3/"
     file = pd.Series(os.listdir(dir))
 
     # scoop up previously processed directories
@@ -18,18 +19,19 @@ def read_original_files(dir, file_extension = 'tiff', pattern_name = "CCLF", pat
         status = "processed"
         return status
     # scoop up renamed but unnormalized directories
-    if file.str.contains(pattern_name).sum() > 0:
-        print("Directory already processed")
+    elif file.str.contains(pattern_name).sum() > 0:
+        print("Directory already renamed")
         status = "renamed"
         return status
 
-    # keep files that match pattern
-    file = file[file.str.endswith(file_extension)]
-    # turn array into DataFrame
-    file_df = pd.DataFrame(file)
-    file_df.columns = ['original_name']
-    file_df['condition'] = dir.split('/')[-1]       # I set the superior directory to be the condition
-    return(file_df)
+    else:
+        # keep files that match pattern
+        file = file[file.str.endswith(file_extension)]
+        # turn array into DataFrame
+        file_df = pd.DataFrame(file)
+        file_df.columns = ['original_name']
+        file_df['condition'] = dir.split('/')[-1]       # I set the superior directory to be the condition
+        return(file_df)
 
 
 def row_col_to_well(df_row):
@@ -109,7 +111,7 @@ def rename_file(path, ch1, ch2, ch3, ch4):
         elif tmp == "renamed":
             channel = "renamed"
             return(channel)
-            
+
     tmp = extract_original_files(tmp)
     tmp = transform_original_files(tmp, ch1, ch2, ch3, ch4)
 

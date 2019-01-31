@@ -18,18 +18,19 @@ def read_original_files(dir, file_extension = 'tiff', pattern_name = "CCLF", pat
         status = "processed"
         return status
     # scoop up renamed but unnormalized directories
-    if file.str.contains(pattern_name).sum() > 0:
-        print("Directory already processed")
+    elif file.str.contains(pattern_name).sum() > 0:
+        print("Directory already renamed")
         status = "renamed"
         return status
 
-    # keep files that match pattern
-    file = file[file.str.endswith(file_extension)]
-    # turn array into DataFrame
-    file_df = pd.DataFrame(file)
-    file_df.columns = ['original_name']
-    file_df['condition'] = dir.split('/')[-1]       # I set the superior directory to be the condition
-    return(file_df)
+    else:
+        # keep files that match pattern
+        file = file[file.str.endswith(file_extension)]
+        # turn array into DataFrame
+        file_df = pd.DataFrame(file)
+        file_df.columns = ['original_name']
+        file_df['condition'] = dir.split('/')[-1]       # I set the superior directory to be the condition
+        return(file_df)
 
 
 def extract_original_files_project(df):
@@ -101,13 +102,13 @@ def rename_file(path, ch1, ch2, ch3, ch4):
 
     tmp = read_original_files(dir)
 
-        if not isinstance(tmp, pd.DataFrame):
-            if tmp == "processed":
-                channel = "processed"
-                return(channel)
-            elif tmp == "renamed":
-                channel = "renamed"
-                return(channel)
+    if not isinstance(tmp, pd.DataFrame):
+        if tmp == "processed":
+            channel = "processed"
+            return(channel)
+        elif tmp == "renamed":
+            channel = "renamed"
+            return(channel)
 
     tmp = extract_original_files_project(tmp)
     tmp = transform_original_files_project(tmp, ch1, ch2, ch3, ch4)

@@ -11,6 +11,7 @@ from skimage import io
 import scipy.misc
 import imageio
 import re
+from statistics import mode
 
     #32767.5 # target_mean
     #65535 max_num
@@ -53,7 +54,7 @@ def create_output_filename(path, image_channel_path, file_extension = 'png', cro
     return(scale_path)
 
 
-def normalize_convert(path, image_channel_path, scale_path, target_std, target_mean, max_num, min_num):
+def normalize_convert_mu_sd(path, image_channel_path, scale_path, target_std, target_mean, max_num, min_num):
     #legacy renaming
     dir = path
     # joining
@@ -84,13 +85,56 @@ def normalize_convert(path, image_channel_path, scale_path, target_std, target_m
         imageio.imwrite(uri = scale_path[i], im = mat_ms)
         #imageio.imwrite(uri = collapsed_list, im = mat_ms)
 
-        print("normalized files in: {0}" .format(scale_path[i]))
+        print("normalized files by mean and std in: {0}" .format(scale_path[i]))
+
+def normalize_convert_percent(path, image_channel_path, scale_path, target_low, target_high, max_num, min_num):
+    #legacy renaming
+    dir = path
+
+    #i = 0
+    #collapsed_list = "/Users/nrindtor/bucket/flatfield/000012070903_2019-01-10T20_04_27-Measurement_3/000012070903_2019-01-10T20_04_27-Measurement_3-sk1-A01-f01-ch3/lab-CCLF,condition-000012070903_2019-01-10T20_04_27-Measurement_3-sk1-A01-f01-ch3,acquisition_date,year-2019,month-1,day-29,minute-22,well-A01,tile_computation-01,depth_computation-MAXPROJECT,channel-MAP2_CONFOCAL,is_mask-false.tiff"
+    # joining
+    joined_list = []
+    for i in np.ndarray.tolist(image_channel_path):
+        joined = os.path.join(dir, i)
+        joined_list.append(joined)
+    #I collapse the list into the standard input format for image collections
+    collapsed_list = ':'.join(joined_list)
+    #I load data
+    image_coll = io.imread_collection(collapsed_list)
+
+    #I scale and save data
+    image_scaled = []
+    for i in range(len(image_coll)):
+        #image_scaled.append(StandardScaler().fit_transform(image_coll[i]))
+        tmp = image_coll[i]
+        #tmp = tmp.astype(np.uint16)
+        max = np.quantile(tmp, target_high)
+        if target_low == "mode":
+            min = float(mode(tmp.flatten().tolist()))
+        elif target_low == "median":
+            min = np.quantile(tmp, 0.5)
+        else:
+            min = np.quantile(tmp, target_low)
+        #I rescale
+        mat_ms = (tmp - min)/max
+        #I trim
+        mat_ms[mat_ms > max_num] = max_num
+        mat_ms[mat_ms < min_num] = min_num
+        #mat_ms = mat_ms.astype(np.int16)
+        mat_ms = mat_ms*65535
+        mat_ms = mat_ms.astype(np.uint16)
+        #I store
+        imageio.imwrite(uri = scale_path[i], im = mat_ms)
+        #imageio.imwrite(uri = collapsed_list, im = mat_ms)
+
+        print("normalized files by quantiles in: {0}" .format(scale_path[i]))
 
 def normalize_convert_brightfield(path,image_channel_path, scale_path, target_std = 0.125, target_mean = 0.5 , max_num = 1 , min_num = 0):
-    normalize_convert(path,image_channel_path, scale_path, target_std, target_mean, max_num, min_num)
+    normalize_convert_mu_sd(path,image_channel_path, scale_path, target_std, target_mean, max_num, min_num)
 
-def normalize_convert_flourescent(path,image_channel_path, scale_path, target_std = 0.125, target_mean = 0.25 , max_num = 1 , min_num = 0):
-    normalize_convert(path,image_channel_path, scale_path, target_std, target_mean, max_num, min_num)
+def normalize_convert_flourescent(path,image_channel_path, scale_path, target_low = "mode", target_high = 0.9999, max_num = 1 , min_num = 0):
+    normalize_convert_percent(path,image_channel_path, scale_path, target_low, target_high, max_num, min_num)
 
 # buggy TODO nrindtor
 def __clean(path, pattern = '.tiff'):
