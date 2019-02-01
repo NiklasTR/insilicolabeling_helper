@@ -147,7 +147,7 @@ def normalize_convert_percent(path, image_channel_path, scale_path, target_low, 
 def normalize_convert_brightfield(path,image_channel_path, scale_path, target_std = 0.125, target_mean = 0.5 , max_num = 1 , min_num = 0):
     normalize_convert_mu_sd(path,image_channel_path, scale_path, target_std, target_mean, max_num, min_num)
 
-def normalize_convert_flourescent(path,image_channel_path, scale_path, target_low = "mode", target_high = 0.9999, max_num = 1 , min_num = 0):
+def normalize_convert_flourescent(path,image_channel_path, scale_path, target_low = "mode", target_high = 0.99, max_num = 1 , min_num = 0):
     normalize_convert_percent(path,image_channel_path, scale_path, target_low, target_high, max_num, min_num)
 
 # buggy TODO nrindtor
