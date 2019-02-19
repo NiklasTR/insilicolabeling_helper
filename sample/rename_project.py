@@ -34,7 +34,7 @@ def read_original_files(dir, file_extension = 'tiff', pattern_name = "CCLF", pat
 
 
 def extract_original_files_project(df):
-
+    # TODO needs fixing = the delimiter changed from "_" to "-"
     f_ch = lambda x: x["original_name"].split("_")[-2]
     f_fl = lambda x: x["original_name"].split("_")[-3][1:]
 
