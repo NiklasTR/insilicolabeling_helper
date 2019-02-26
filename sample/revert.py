@@ -6,7 +6,7 @@ import sys
 def identify_files(path, input_extension = 'tif'):
     #legacy renaming
     dir = path
-    #dir = '/Users/nrindtor/bucket/flatfield/000012070903_2019-01-10T20_04_27-Measurement_3/000012070903_2019-01-10T20_04_27-Measurement_3-sk1-A01-f01-ch3'
+    #dir = '/Users/nrindtor/bucket/flatfield/000012070903_2019-01-10T20_04_27-Measurement_3/000012070903_2019-01-10T20_04_27-Measurement_3-sk1-A10-f01-ch3'
     #dir = sys.argv[1]
     #for local:
     #dir = '/Users/nrindtor/rapid_dev/insilico-labeling/703_cd45/cd45_projection/'
@@ -17,14 +17,14 @@ def identify_files(path, input_extension = 'tif'):
     image_channel_path = [i for i in file_list if input_extension in i]
     return(image_channel_path)
 
-def create_output_filename(path, image_channel_path, projection_tag = "-maxproject", file_extension = ".tiff"):
+def create_output_filename(path, image_channel_path, projection_tag = "-maxproject", file_extension = ".tiff", exclude_tag = "maxproject"):
     #legacy renaming
     dir = path
     # I create a list of output filenames
     rename_path = []
     #i = 0
 
-    exclude_list = [i for i in image_channel_path if projection_tag in i]
+    exclude_list = [i for i in image_channel_path if exclude_tag in i]
     if len(exclude_list) > 0:
         print("skipping directory %s" % dir)
         return()
