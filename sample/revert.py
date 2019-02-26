@@ -29,13 +29,14 @@ def create_output_filename(path, image_channel_path, projection_tag = "-maxproje
         print("skipping directory")
         return()
 
-    for i in range(len(image_channel_path)):
-        new_name = image_channel_path[i].split(',')[1][10:]
-        new_name = new_name + projection_tag + file_extension #trimming the file ending
-        joined_new_name = os.path.join(dir, new_name)
-        rename_path.append(joined_new_name)
+    if len(exclude_list) == 0:
+        for i in range(len(image_channel_path)):
+            new_name = image_channel_path[i].split(',')[1][10:]
+            new_name = new_name + projection_tag + file_extension #trimming the file ending
+            joined_new_name = os.path.join(dir, new_name)
+            rename_path.append(joined_new_name)
 
-    return(rename_path)
+        return(rename_path)
 
 # different from rename module
 def rename_file(dir, image_channel_path, rename_path):
