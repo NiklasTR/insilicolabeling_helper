@@ -26,6 +26,7 @@ def create_output_filename(path, image_channel_path, projection_tag = "-maxproje
 
     exclude_list = [i for i in image_channel_path if exclude_tag in i]
     if len(exclude_list) > 0:
+        print("skipping directory")
         return()
 
     for i in range(len(image_channel_path)):
