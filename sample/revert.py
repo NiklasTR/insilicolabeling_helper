@@ -17,12 +17,17 @@ def identify_files(path, input_extension = 'tif'):
     image_channel_path = [i for i in file_list if input_extension in i]
     return(image_channel_path)
 
-def create_output_filename(path, image_channel_path, projection_tag = "-maxproject", file_extension = ".tiff"):
+def create_output_filename(path, image_channel_path, projection_tag = "-maxproject", file_extension = ".tiff", exclude_tag = "lab-CCLF"):
     #legacy renaming
     dir = path
     # I create a list of output filenames
     rename_path = []
     #i = 0
+
+    exclude_list = [i for i in image_channel_path if exclude_tag in i]
+    if len(exclude_list) > 0:
+        return()
+
     for i in range(len(image_channel_path)):
         new_name = image_channel_path[i].split(',')[1][10:]
         new_name = new_name + projection_tag + file_extension #trimming the file ending
@@ -35,7 +40,7 @@ def create_output_filename(path, image_channel_path, projection_tag = "-maxproje
 def rename_file(dir, image_channel_path, rename_path):
 
     if len(image_channel_path) != len(rename_path):
-        sys.exit()
+        return()
     else:
         for i in range(len(image_channel_path)):
             os.rename(os.path.join(dir, image_channel_path[i]), os.path.join(dir, rename_path[i]))
