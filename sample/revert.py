@@ -6,7 +6,7 @@ import sys
 def identify_files(path, input_extension = 'tif'):
     #legacy renaming
     dir = path
-    dir = '/Users/nrindtor/bucket/flatfield/000012070903_2019-01-10T20_04_27-Measurement_3/000012070903_2019-01-10T20_04_27-Measurement_3-sk1-A01-f01-ch3'
+    #dir = '/Users/nrindtor/bucket/flatfield/000012070903_2019-01-10T20_04_27-Measurement_3/000012070903_2019-01-10T20_04_27-Measurement_3-sk1-A01-f01-ch3'
     #dir = sys.argv[1]
     #for local:
     #dir = '/Users/nrindtor/rapid_dev/insilico-labeling/703_cd45/cd45_projection/'
