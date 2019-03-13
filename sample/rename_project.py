@@ -5,6 +5,7 @@ import pandas as pd
 import os
 from string import ascii_uppercase
 import datetime
+import shutil
 
 #from definition import CONFIG_PATH
 
@@ -92,7 +93,8 @@ def supply_isl_name(df_row, experiment_descriptor = "None"):
         condition = df_row['condition']))
 
 def change_name(df_row, dir):
-    os.rename(os.path.join(dir, df_row['original_name']), os.path.join(dir, df_row['isl_name']))
+    #os.rename(os.path.join(dir, df_row['original_name']), os.path.join(dir, df_row['isl_name']))
+    shutil.copy2(os.path.join(dir, df_row['original_name']), os.path.join(dir, df_row['isl_name']))
     return()
 
 
