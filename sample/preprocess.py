@@ -29,7 +29,7 @@ def process_dir_project(path, ch1, ch2, ch3, ch4, avoid_project):         #, ch1
     renames and normalizes directory of a single projected image
     path=directory of interest with .tiff files
     """
-    #path = '/Users/nrindtor/GitHub/isl_preprocess/local_data/test/703__2018-11-07T20_55_16-Measurement_1-sk2-A05-f07-ch2'
+    #path = '/home/ubuntu/bucket/flatfield/000012048903__2019-02-05T20_27_41-Measurement_1/000012048903__2019-02-05T20_27_41-Measurement_1-sk1-A01-f01-ch2'
     #renaming
     channel = rename_project.rename_file(path, ch1, ch2, ch3, ch4)
     #normalizing
@@ -43,7 +43,10 @@ def process_dir_project(path, ch1, ch2, ch3, ch4, avoid_project):         #, ch1
         print("Skipped directory or received images that did not match the keep_project pattern")
 
 def __main_manual(path=sys.argv[1], ch1=sys.argv[2], ch2=sys.argv[3], ch3=sys.argv[4], ch4=sys.argv[5], pattern = "Measurement", keep_stack = "BRIGHTFIELD"):
-    # ch1="DPC", ch2="BRIGHTFIELD", ch3="CE", ch4="TMRM"
+#ch1="DPC"
+#ch2="BRIGHTFIELD"
+#ch3="CE"
+#ch4="TMRM"
     # creating list of dirs
     #path = '/Users/nrindtor/GitHub/isl_preprocess/local_data/test'
     pattern = sys.argv[6]
