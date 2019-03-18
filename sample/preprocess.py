@@ -33,7 +33,7 @@ def process_dir_project(path, ch1, ch2, ch3, ch4, avoid_project):         #, ch1
     #renaming
     channel = rename_project.rename_file(path, ch1, ch2, ch3, ch4)
     #normalizing
-    if channel != avoid_project and channel != "processed":
+    if channel != avoid_project and channel != "processed" and channel != "DPC":
         image_channel_path = normalize.identify_files(path, channel = "CCLF")
         scale_path = normalize.create_output_filename(path, image_channel_path)
         normalize.normalize_convert_flourescent(path,image_channel_path, scale_path)
