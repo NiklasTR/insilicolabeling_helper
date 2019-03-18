@@ -36,8 +36,8 @@ def read_original_files(dir, file_extension = 'tiff', pattern_name = "CCLF", pat
 
 def extract_original_files_project(df):
     # TODO needs fixing = the delimiter changed from "_" to "-"
-    f_ch = lambda x: x["original_name"].split("-")[-2]
-    f_fl = lambda x: x["original_name"].split("-")[-3][1:]
+    f_ch = lambda x: x["original_name"].split("-")[-1].split("_")[0]
+    f_fl = lambda x: x["original_name"].split("-")[-2][1:]
     df = df.assign(channel_n = df.apply(f_ch, axis=1),
                     #row = df.original_name.str.slice(1,3),
                     #col = df.original_name.str.slice(4,6),
@@ -47,7 +47,7 @@ def extract_original_files_project(df):
 
 
 def transform_original_files_project(df, ch1, ch2, ch3, ch4):
-    f_wl = lambda x: x["original_name"].split("-")[-4]
+    f_wl = lambda x: x["original_name"].split("-")[-3]
     df = df.assign(well = df.apply(f_wl, axis=1),
                    channel = df.apply(translate_channel, axis = 1, ch1 = ch1, ch2 = ch2, ch3 = ch3, ch4 = ch4))
     df = df.assign(isl_name = df.apply(supply_isl_name, axis = 1, experiment_descriptor = "None"))
