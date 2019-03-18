@@ -131,8 +131,8 @@ if __name__ == '__main__':
     __main_manual()
 
 #for debugging:
-dir = '/Users/nrindtor/GitHub/isl_preprocess/local_data/test/703__2018-11-07T20_55_16-Measurement_1-sk2-A05-f07-ch2'
-ch1="DPC"
-ch2="BRIGHTFIELD"
-ch3="CE"
-ch4="TMRM"
+#dir = '/Users/nrindtor/GitHub/isl_preprocess/local_data/test/703__2018-11-07T20_55_16-Measurement_1-sk2-A05-f07-ch2'
+#ch1="DPC"
+#ch2="BRIGHTFIELD"
+#ch3="CE"
+#ch4="TMRM"
