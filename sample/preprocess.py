@@ -56,6 +56,7 @@ def __main_manual(path=sys.argv[1], ch1=sys.argv[2], ch2=sys.argv[3], ch3=sys.ar
     # creating list of dirs
     #path = '/home/ubuntu/bucket/flatfield/000012048903__2019-02-05T20_27_41-Measurement_1/'
     pattern = sys.argv[6]
+    print("listing directories")
     dir_list = os.listdir(path)
     dir_list = [i for i in dir_list if pattern in i]
     #I define a dictionary of channels
@@ -66,6 +67,8 @@ def __main_manual(path=sys.argv[1], ch1=sys.argv[2], ch2=sys.argv[3], ch3=sys.ar
     pattern_segmentation = d_inverted[keep_segmentation]
     #I only keep stacks for the directory list and run the loop
     dir_list_stack = [i for i in dir_list if pattern_stack in i]
+
+    print("start processing")
 
     # I define a small helper function that only takes one input
     def stack_helper(dir):
