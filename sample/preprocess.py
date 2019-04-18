@@ -79,7 +79,7 @@ def __main_manual(path=sys.argv[1], ch1=sys.argv[2], ch2=sys.argv[3], ch3=sys.ar
     # for loop - deprecated
     #for dir in dir_list_stack:
     #    stack_helper(dir)
-    with Pool(number_of_workers) as p:
+    with multiprocessing.Pool(number_of_workers) as p:
         p.map(stack_helper, dir_list_stack)
     # I treat everything else as a projection
     dir_list_project = [i for i in dir_list if pattern_stack not in i]
