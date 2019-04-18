@@ -60,6 +60,7 @@ if __name__ == '__main__':
     keep_segmentation = "DPC"
     # define number of cores
     number_of_workers = multiprocessing.cpu_count()
+    #number_of_workers = 
     # creating list of dirs
     #path = '/home/ubuntu/bucket/flatfield/000012048903__2019-02-05T20_27_41-Measurement_1/'
     print("listing directories")
