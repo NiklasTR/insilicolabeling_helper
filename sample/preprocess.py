@@ -69,8 +69,10 @@ def __main_manual(path=sys.argv[1], ch1=sys.argv[2], ch2=sys.argv[3], ch3=sys.ar
 
     # I define a small helper function that only takes one input
     def stack_helper(dir):
+        print("received input dir")
         path_joined = os.path.join(path, dir)
         process_dir_stack(path_joined, ch1=ch1, ch2=ch2, ch3=ch3, ch4=ch4, keep_stack=keep_stack)
+        print("processed input dir")
     # for loop - deprecated
     #for dir in dir_list_stack:
     #    stack_helper(dir)
@@ -81,8 +83,10 @@ def __main_manual(path=sys.argv[1], ch1=sys.argv[2], ch2=sys.argv[3], ch3=sys.ar
     dir_list_project = [i for i in dir_list_project if pattern_segmentation not in i]
 
     def project_helper(dir):
+        print("received input dir")
         path_joined = os.path.join(path, dir)
         process_dir_project(path_joined, ch1=ch1, ch2=ch2, ch3=ch3, ch4=ch4, avoid_project=keep_stack)
+        print("processed input dir")
     #for dir in dir_list_project:
     #    project_helper(dir)
 
