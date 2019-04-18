@@ -5,6 +5,10 @@ import normalize
 import os
 import pandas as pd
 import sys
+#parallel execution
+import multiprocessing
+from functools import partial
+from contextlib import contextmanager
 
 def process_dir_stack(path, ch1, ch2, ch3, ch4, keep_stack):         #, ch1="DPC", ch2="BRIGHTFIELD", ch3="CE", ch4="TMRM"
     """
@@ -47,6 +51,8 @@ def __main_manual(path=sys.argv[1], ch1=sys.argv[2], ch2=sys.argv[3], ch3=sys.ar
 #ch2="BRIGHTFIELD"
 #ch3="CE"
 #ch4="TMRM"
+    # define number of cores
+    number_of_workers = multiprocessing.cpu_count()
     # creating list of dirs
     #path = '/home/ubuntu/bucket/flatfield/000012048903__2019-02-05T20_27_41-Measurement_1/'
     pattern = sys.argv[6]
@@ -60,9 +66,16 @@ def __main_manual(path=sys.argv[1], ch1=sys.argv[2], ch2=sys.argv[3], ch3=sys.ar
     pattern_segmentation = d_inverted[keep_segmentation]
     #I only keep stacks for the directory list and run the loop
     dir_list_stack = [i for i in dir_list if pattern_stack in i]
-    for dir in dir_list_stack:
+
+    # I define a small helper function that only takes one input
+    def stack_helper(dir):
         path_joined = os.path.join(path, dir)
         process_dir_stack(path_joined, ch1=ch1, ch2=ch2, ch3=ch3, ch4=ch4, keep_stack=keep_stack)
+    # for loop - deprecated
+    #for dir in dir_list_stack:
+    #    stack_helper(dir)
+    with Pool(number_of_workers) as p:
+        p.map(stack_helper, dir_list_stack)
     # I treat everything else as a projection
     dir_list_project = [i for i in dir_list if pattern_stack not in i]
     dir_list_project = [i for i in dir_list_project if pattern_segmentation not in i]
