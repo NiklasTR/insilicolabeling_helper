@@ -1,6 +1,6 @@
 # isl_preprocess
 
-This repository provides functions to rescale and format cellprofiler output files for use in the in-silico-labeling algorithm. 
+This repository provides functions to rescale and format cellprofiler output files for use in the in-silico-labeling model published by the Google Science Accelerator. 
 
 ## preprocess.py
 
